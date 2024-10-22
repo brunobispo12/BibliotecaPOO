@@ -1,7 +1,6 @@
 import Models.Administrador;
 import Models.Categoria;
 import Models.Livro;
-
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -17,37 +16,22 @@ public class MainClass {
             return;
         }
 
-        // Menu principal
         boolean sair = false;
         while (!sair) {
             exibirMenuPrincipal();
             int opcao = lerOpcaoMenu();
-            
             switch (opcao) {
-                case 1:
-                    cadastrarCategoria();
-                    break;
-                case 2:
-                    cadastrarLivro();
-                    break;
-                case 3:
-                    consultarLivro();
-                    break;
-                case 4:
-                    excluirLivro();
-                    break;
-                case 5:
-                    sistemaBiblioteca.listarLivros();
-                    break;
-                case 6:
-                    sistemaBiblioteca.listarCategorias();  // Nova opção para listar categorias
-                    break;
-                case 0:
-                    sair = true;
-                    System.out.println("Saindo do sistema...");
-                    break;
-                default:
-                    System.out.println("Opção inválida. Tente novamente.");
+                case 1: cadastrarCategoria(); break;
+                case 2: cadastrarLivro(); break;
+                case 3: consultarLivro(); break;
+                case 4: excluirLivro(); break;
+                case 5: alterarLivro(); break;
+                case 6: sistemaBiblioteca.listarLivros(); break;
+                case 7: sistemaBiblioteca.listarCategorias(); break;
+                case 8: alterarCategoria(); break;
+                case 9: excluirCategoria(); break;
+                case 0: sair = true; System.out.println("Saindo do sistema..."); break;
+                default: System.out.println("Opção inválida.");
             }
         }
     }
@@ -58,10 +42,10 @@ public class MainClass {
             try {
                 System.out.print("Escolha uma opção: ");
                 opcao = scanner.nextInt();
-                scanner.nextLine();  // Consumir a nova linha
+                scanner.nextLine();
             } catch (InputMismatchException e) {
                 System.out.println("Opção inválida. Digite um número.");
-                scanner.nextLine();  // Limpa o buffer de entrada
+                scanner.nextLine();
             }
         }
         return opcao;
@@ -72,7 +56,6 @@ public class MainClass {
         String login = scanner.nextLine();
         System.out.print("Digite a senha: ");
         String senha = scanner.nextLine();
-
         return administrador.autenticar(login, senha);
     }
 
@@ -82,8 +65,11 @@ public class MainClass {
         System.out.println("2. Cadastrar Livro");
         System.out.println("3. Consultar Livro");
         System.out.println("4. Excluir Livro");
-        System.out.println("5. Listar Todos os Livros");
-        System.out.println("6. Listar Todas as Categorias");  // Nova opção de menu
+        System.out.println("5. Alterar Livro");
+        System.out.println("6. Listar Todos os Livros");
+        System.out.println("7. Listar Todas as Categorias");
+        System.out.println("8. Alterar Categoria");
+        System.out.println("9. Excluir Categoria");
         System.out.println("0. Sair");
     }
 
@@ -93,16 +79,14 @@ public class MainClass {
             try {
                 System.out.print("Digite o código da categoria: ");
                 codigo = scanner.nextInt();
-                scanner.nextLine();  // Consumir a nova linha
+                scanner.nextLine();
             } catch (InputMismatchException e) {
-                System.out.println("Código inválido. Digite um número.");
-                scanner.nextLine();  // Limpa o buffer de entrada
+                System.out.println("Código inválido.");
+                scanner.nextLine();
             }
         }
-
         System.out.print("Digite o nome da categoria: ");
         String nome = scanner.nextLine();
-
         Categoria categoria = new Categoria(codigo, nome);
         sistemaBiblioteca.cadastrarCategoria(categoria);
         System.out.println("Categoria cadastrada com sucesso.");
@@ -113,34 +97,30 @@ public class MainClass {
         String titulo = scanner.nextLine();
         System.out.print("Digite o autor do livro: ");
         String autor = scanner.nextLine();
-
         String isbn;
         do {
             System.out.print("Digite o ISBN do livro: ");
             isbn = scanner.nextLine();
             if (!isbn.matches("\\d+")) {
-                System.out.println("ISBN inválido. Deve conter apenas números.");
+                System.out.println("ISBN inválido.");
             }
         } while (!isbn.matches("\\d+"));
-
         int codigoCategoria = -1;
         while (codigoCategoria == -1) {
             try {
-                System.out.print("Digite o código da categoria do livro: ");
+                System.out.print("Digite o código da categoria: ");
                 codigoCategoria = scanner.nextInt();
-                scanner.nextLine();  // Consumir a nova linha
+                scanner.nextLine();
             } catch (InputMismatchException e) {
-                System.out.println("Código inválido. Digite um número.");
-                scanner.nextLine();  // Limpa o buffer de entrada
+                System.out.println("Código inválido.");
+                scanner.nextLine();
             }
         }
-
         Categoria categoria = sistemaBiblioteca.consultarCategoriaPorCodigo(codigoCategoria);
         if (categoria == null) {
-            System.out.println("Categoria não encontrada. Cadastro cancelado.");
+            System.out.println("Categoria não encontrada.");
             return;
         }
-
         Livro livro = new Livro(titulo, autor, isbn, categoria);
         sistemaBiblioteca.adicionarLivro(livro);
         System.out.println("Livro cadastrado com sucesso.");
@@ -151,7 +131,6 @@ public class MainClass {
         String isbn = scanner.nextLine();
         Livro livro = sistemaBiblioteca.consultarLivroPorISBN(isbn);
         if (livro != null) {
-            System.out.println("Livro encontrado: ");
             System.out.println(livro);
         } else {
             System.out.println("Livro não encontrado.");
@@ -166,6 +145,37 @@ public class MainClass {
             System.out.println("Livro excluído com sucesso.");
         } else {
             System.out.println("Livro não encontrado.");
+        }
+    }
+
+    private static void alterarLivro() {
+        System.out.print("Digite o ISBN do livro a ser alterado: ");
+        String isbn = scanner.nextLine();
+        System.out.print("Digite o novo título do livro: ");
+        String novoTitulo = scanner.nextLine();
+        System.out.print("Digite o novo autor do livro: ");
+        String novoAutor = scanner.nextLine();
+        sistemaBiblioteca.alterarLivro(isbn, novoTitulo, novoAutor);
+    }
+
+    private static void alterarCategoria() {
+        System.out.print("Digite o código da categoria a ser alterada: ");
+        int codigo = scanner.nextInt();
+        scanner.nextLine();
+        System.out.print("Digite o novo nome da categoria: ");
+        String novoNome = scanner.nextLine();
+        sistemaBiblioteca.alterarCategoria(codigo, novoNome);
+    }
+
+    private static void excluirCategoria() {
+        System.out.print("Digite o código da categoria a ser excluída: ");
+        int codigo = scanner.nextInt();
+        scanner.nextLine();
+        boolean sucesso = sistemaBiblioteca.excluirCategoria(codigo);
+        if (sucesso) {
+            System.out.println("Categoria excluída com sucesso.");
+        } else {
+            System.out.println("Categoria não encontrada.");
         }
     }
 }

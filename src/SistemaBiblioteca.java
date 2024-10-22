@@ -3,8 +3,8 @@ import Models.Livro;
 
 public class SistemaBiblioteca {
 
-    private Categoria[] categorias = new Categoria[10];  
-    private Livro[] livros = new Livro[50];  
+    private Categoria[] categorias = new Categoria[10];
+    private Livro[] livros = new Livro[50];
     private int totalCategorias = 0;
     private int totalLivros = 0;
 
@@ -23,7 +23,7 @@ public class SistemaBiblioteca {
                 return categorias[i];
             }
         }
-        return null;  
+        return null;
     }
 
     public Categoria consultarCategoriaPorNome(String nome) {
@@ -32,7 +32,30 @@ public class SistemaBiblioteca {
                 return categorias[i];
             }
         }
-        return null;  
+        return null;
+    }
+
+    public void alterarCategoria(int codigo, String novoNome) {
+        Categoria categoria = consultarCategoriaPorCodigo(codigo);
+        if (categoria != null) {
+            categoria.setNome(novoNome);
+        } else {
+            System.out.println("Categoria não encontrada.");
+        }
+    }
+
+    public boolean excluirCategoria(int codigo) {
+        for (int i = 0; i < totalCategorias; i++) {
+            if (categorias[i].getCodigo() == codigo) {
+                for (int j = i; j < totalCategorias - 1; j++) {
+                    categorias[j] = categorias[j + 1];
+                }
+                categorias[totalCategorias - 1] = null;
+                totalCategorias--;
+                return true;
+            }
+        }
+        return false;
     }
 
     public void adicionarLivro(Livro livro) {
@@ -50,7 +73,31 @@ public class SistemaBiblioteca {
                 return livros[i];
             }
         }
-        return null;  
+        return null;
+    }
+
+    public void alterarLivro(String isbn, String novoTitulo, String novoAutor) {
+        Livro livro = consultarLivroPorISBN(isbn);
+        if (livro != null) {
+            livro.setTitulo(novoTitulo);
+            livro.setAutor(novoAutor);
+        } else {
+            System.out.println("Livro não encontrado.");
+        }
+    }
+
+    public boolean excluirLivro(String isbn) {
+        for (int i = 0; i < totalLivros; i++) {
+            if (livros[i].getIsbn().equals(isbn)) {
+                for (int j = i; j < totalLivros - 1; j++) {
+                    livros[j] = livros[j + 1];
+                }
+                livros[totalLivros - 1] = null;
+                totalLivros--;
+                return true;
+            }
+        }
+        return false;
     }
 
     public void listarLivros() {
@@ -63,26 +110,10 @@ public class SistemaBiblioteca {
         }
     }
 
-    public boolean excluirLivro(String isbn) {
-        for (int i = 0; i < totalLivros; i++) {
-            if (livros[i].getIsbn().equals(isbn)) {
-                
-                for (int j = i; j < totalLivros - 1; j++) {
-                    livros[j] = livros[j + 1];
-                }
-                livros[totalLivros - 1] = null; 
-                totalLivros--;
-                return true;  
-            }
-        }
-        return false;  
-    }
-
     public void listarCategorias() {
         if (totalCategorias == 0) {
             System.out.println("Nenhuma categoria cadastrada.");
         } else {
-            System.out.println("Categorias cadastradas:");
             for (int i = 0; i < totalCategorias; i++) {
                 System.out.println(categorias[i]);
             }
