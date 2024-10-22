@@ -39,6 +39,9 @@ public class MainClass {
                 case 5:
                     sistemaBiblioteca.listarLivros();
                     break;
+                case 6:
+                    sistemaBiblioteca.listarCategorias();  // Nova opção para listar categorias
+                    break;
                 case 0:
                     sair = true;
                     System.out.println("Saindo do sistema...");
@@ -80,6 +83,7 @@ public class MainClass {
         System.out.println("3. Consultar Livro");
         System.out.println("4. Excluir Livro");
         System.out.println("5. Listar Todos os Livros");
+        System.out.println("6. Listar Todas as Categorias");  // Nova opção de menu
         System.out.println("0. Sair");
     }
 

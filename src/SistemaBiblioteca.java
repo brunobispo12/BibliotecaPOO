@@ -8,7 +8,6 @@ public class SistemaBiblioteca {
     private int totalCategorias = 0;
     private int totalLivros = 0;
 
-
     public void cadastrarCategoria(Categoria categoria) {
         if (totalCategorias < categorias.length) {
             categorias[totalCategorias] = categoria;
@@ -27,7 +26,6 @@ public class SistemaBiblioteca {
         return null;  
     }
 
-
     public Categoria consultarCategoriaPorNome(String nome) {
         for (int i = 0; i < totalCategorias; i++) {
             if (categorias[i].getNome().equalsIgnoreCase(nome)) {
@@ -36,7 +34,6 @@ public class SistemaBiblioteca {
         }
         return null;  
     }
-
 
     public void adicionarLivro(Livro livro) {
         if (totalLivros < livros.length) {
@@ -56,7 +53,6 @@ public class SistemaBiblioteca {
         return null;  
     }
 
-
     public void listarLivros() {
         if (totalLivros == 0) {
             System.out.println("Nenhum livro cadastrado.");
@@ -66,7 +62,6 @@ public class SistemaBiblioteca {
             }
         }
     }
-
 
     public boolean excluirLivro(String isbn) {
         for (int i = 0; i < totalLivros; i++) {
@@ -81,5 +76,16 @@ public class SistemaBiblioteca {
             }
         }
         return false;  
+    }
+
+    public void listarCategorias() {
+        if (totalCategorias == 0) {
+            System.out.println("Nenhuma categoria cadastrada.");
+        } else {
+            System.out.println("Categorias cadastradas:");
+            for (int i = 0; i < totalCategorias; i++) {
+                System.out.println(categorias[i]);
+            }
+        }
     }
 }
